@@ -1,3 +1,10 @@
+/*
+    BUSCA SEQUENCIAL
+    Percorre a lista de valores em busca de um valor especificado.
+    Quando encontra o valor, retorna a posição correspondente a ele.
+    Quando não encontra, retorna o valor convencional -1.
+*/
+
 const primos = [    
     2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 
     79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 
@@ -75,4 +82,64 @@ const primos = [
     7793, 7817, 7823, 7829, 7841, 7853, 7867, 7873, 7877, 7879, 7883, 7901, 7907, 
     7919
 ]
+
+function buscaSequencial(lista, valorBusca) {
+    // Percurso do vetor lista
+    for(let i = 0; i < lista.length; i++){
+        if(lista[i] === valorBusca) return i // Encontrou
+    }
+    return -1  // Não encontrou.
+}
+
+// Usando a função buscaSequencial para procurar um valor
+console.time('2539')
+console.log(buscaSequencial(primos, 2539))
+console.timeEnd('2539')
+
+console.time('1003')
+console.log(buscaSequencial(primos, 1003))
+console.timeEnd('1003')
+
+// Importando um vetor com 1000000+ que está no arquivo
+// vetor-nomes.js na pasta dados
+// module.exports + require() só funciona no node.js
+// não funciona em JS dentro de páginas HTML
+const nomes = require('./dados/vetor-nomes')
+
+// Busca do nome 'JONAS'
+console.time('JONAS')
+console.log(buscaSequencial(nomes, 'JONAS'))
+console.timeEnd('JONAS')
+
+function buscaSequencial2(lista, valorBusca, fnComp) {
+    // Percurso do vetor lista
+    for(let i = 0; i < lista.length; i++){
+        // Chamando uma função externa para fazer a comparação
+        if(fnComp(lista[i], valorBusca)) return i // Encontrou
+    }
+    return -1  // Não encontrou.
+}
+
+function comparaNome(obj, nome) {
+    // Função recebe um objeto e um nome (string)
+    // Retorna true caso a propriedade first_name de obj seja igual a nome
+    // ou false, caso contrário
+    return obj.first_name === nome
+}
+
+const listaNomes = require('./dados/lista-nomes')
+
+console.time('FAUSTO')
+// Chamando a função buscaSequencial2, com a função de comparação
+// como terceiro parametro
+console.log(buscaSequencial2(listaNomes, 'FAUSTO', comparaNome))
+// Passando a função de comparação com arrow function
+// ((obj, nome) => obj.first_name === nome)
+console.timeEnd('FAUSTO')
+
+// Procurar o primkeiro nome que possui mais de 1000 pessoas registradas no Brasil
+console.time('1000+')
+let pos = buscaSequencial2(listaNomes, 1000, (obj, valor) => obj.frequency_total > valor)
+console.log(listaNomes[pos], pos)
+console.timeEnd('1000+')
 
